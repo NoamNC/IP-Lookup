@@ -5,7 +5,7 @@
         <v-btn href="https://torq.io/" target="_blank" text>
           <v-img
             alt="Torq logo"
-            class="shrink mt-1 "
+            class="shrink"
             contain
             min-width="100"
             src="https://torq.io/wp-content/uploads/2021/06/torq-blck.png"
@@ -20,8 +20,9 @@
         href="https://github.com/NoamNC"
         target="_blank"
         text
+        class="btn-text shrink"
       >
-        <span class="mr-2">Checkout my other projects</span>
+        <span class="side-text">Checkout my other projects</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
@@ -42,9 +43,13 @@ export default {
 };
 </script>
 
-<style >
-.v-btn{
+<style>
+.v-btn {
   text-transform: none;
 }
 
+.btn-text {
+  display: inline-block;
+  white-space: normal;
+}
 </style>

@@ -36,6 +36,6 @@ export default {
 
 <style scoped>
 .clock {
-  margin: 0px;
+  margin: 0px 0px 0px 5px;
 }
 </style>

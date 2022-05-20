@@ -16,9 +16,9 @@
       </v-btn>
       <v-divider class="divider" />
       <IpSearchbar
-        v-for="(item, index) in searchBars"
-        :key="index"
-        :searchBarIdx="index"
+        v-for="(searchBarData, searchBarIdx) in searchBars"
+        :key="searchBarIdx"
+        :searchBarIdx="searchBarIdx"
       />
     </div>
   </v-card>
@@ -73,11 +73,10 @@ export default {
 .bottom-section {
   padding: 20px;
 }
-@media only screen and (max-width: 425px) {
-  /*Small smartphones [325px -> 425px]*/
+@media only screen and (max-width: 350px) {
   .bottom-section,
   .top-section {
-    padding: 40px;
+    padding:20px 10px;
   }
 }
 .v-btn {

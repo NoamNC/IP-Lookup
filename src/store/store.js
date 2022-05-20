@@ -12,7 +12,6 @@ const getters = {
   searchBars() {
     return state.searchBars;
   },
-
 };
 const mutations = {
   reset(state) {
@@ -23,33 +22,33 @@ const mutations = {
     state.searchBars.push(searchBarObj);
   },
 
-  updateSearchBarData(state, { index, searchBarObj }) {
-    state.searchBars[index] = searchBarObj;
+  updateSearchBarData(state, { searchBarIdx, searchBarObj }) {
+    state.searchBars[searchBarIdx] = searchBarObj;
   },
 };
 
 const actions = {
-  // eslint-disable-next-line no-empty-pattern
-  async sendReq({ commit }, { ip, index }) {
+  async implementData({ commit }, { ip, searchBarIdx }) {
     const cachedIpResult = cacheService.find(ip);
     if (cachedIpResult) {
-      commit('updateSearchBarData', { index, searchBarObj: cachedIpResult });
+      commit('updateSearchBarData', { searchBarIdx, searchBarObj: cachedIpResult });
       return cachedIpResult;
     }
 
-    const response = await apiService.getCountryInfo(ip);
+    const response = await apiService.getCountryData(ip);
     if (response.error) {
       return response;
     }
-
+    
     const filteredResponse = {
       ip,
+      name: countryService.getName(response),
       timeZoneName: countryService.getTimeZoneName(response),
       flagUrl: countryService.getFlagUrl(response),
     };
 
     cacheService.insert(ip, filteredResponse);
-    commit('updateSearchBarData', { index, searchBarObj: filteredResponse });
+    commit('updateSearchBarData', { searchBarIdx, searchBarObj: filteredResponse });
     return filteredResponse;
   },
 };

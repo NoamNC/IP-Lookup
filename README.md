@@ -1,4 +1,3 @@
-# ip lookup
 
 ## Table of Contents
 1. [General Info](#general-info)
@@ -6,6 +5,7 @@
 3. [FAQs](#faqs)
 4. [Spacial thanks](#spacial-thanks)
 
+# IP lookup app
 ### General Info
 The ip lookup app is an app that displays the country flag and local time upon an entering an ip address to the text area.
 

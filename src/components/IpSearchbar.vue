@@ -13,7 +13,7 @@
       :disabled="loading"
       label="IP address"
       @click:clear="clearSearchbar"
-      @blur="sendReq"
+      @blur="getInfo"
     ></v-text-field>
     <v-progress-circular
       size="25"
@@ -23,7 +23,19 @@
       color="primary"
     ></v-progress-circular>
     <div v-show="!loading" class="country-info">
-      <img v-if="countryInfo" :src="countryInfo.flagUrl" alt="flag" class="flag" />
+      <v-tooltip bottom v-if="countryInfo">
+        <template v-slot:activator="{ on, attrs }">
+          <img
+            v-if="countryInfo"
+            v-bind="attrs"
+            v-on="on"
+            :src="countryInfo.flagUrl"
+            alt="flag"
+            class="flag"
+          />
+        </template>
+        <span>{{ countryInfo.name }}</span>
+      </v-tooltip>
       <LiveClock v-if="countryInfo" :timeZoneName="countryInfo.timeZoneName" />
       <v-tooltip bottom v-if="errorMessage">
         <template v-slot:activator="{ on, attrs }">
@@ -73,29 +85,32 @@ export default {
       this.rules.ip = true;
       this.errorMessage = null;
       this.countryInfo = null;
-      this.$store.commit('updateSearchBarData', { index: this.searchBarIdx, searchBarObj: {} });
+      this.$store.commit('updateSearchBarData', {
+        searchBarIdx: this.searchBarIdx,
+        searchBarObj: {},
+      });
     },
     isIp(ip) {
       const pattern = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}$/;
       return pattern.test(ip);
     },
-    async sendReq() {
+    async getInfo() {
       if (!this.ip || !this.isIp(this.ip)) {
         this.countryInfo = null;
         this.errorMessage = null;
         this.$store.commit('updateSearchBarData', {
-          index: this.searchBarIdx,
+          searchBarIdx: this.searchBarIdx,
           searchBarObj: {},
         });
         return;
       }
       if (this.$store.getters.searchBars[this.searchBarIdx].ip === this.ip) {
-        return
+        return;
       }
       this.loading = true;
-      const response = await this.$store.dispatch('sendReq', {
+      const response = await this.$store.dispatch('implementData', {
         ip: this.ip,
-        index: this.searchBarIdx,
+        searchBarIdx: this.searchBarIdx,
       });
       response.error
         ? (this.errorMessage =
@@ -130,6 +145,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 7fr 2fr;
   align-items: baseline;
+  grid-column-gap: 5px
 }
 
 .country-info {
@@ -138,7 +154,8 @@ export default {
 }
 .flag {
   margin: auto;
-  max-width: 35%;
+  max-width: 40px;
+  max-height: 20px;
 }
 
 .error-icon {
