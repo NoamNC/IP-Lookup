@@ -4,7 +4,6 @@ import vuetify from './plugins/vuetify'
 import axios from 'axios';
 import store from './store/store'
 
-// axios.defaults.timeout = 20000;
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
 
