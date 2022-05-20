@@ -13,7 +13,7 @@
       :disabled="loading"
       label="IP address"
       @click:clear="clearSearchbar"
-      @blur="getInfo"
+      @blur="getData"
     ></v-text-field>
     <v-progress-circular
       size="25"
@@ -94,7 +94,7 @@ export default {
       const pattern = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}$/;
       return pattern.test(ip);
     },
-    async getInfo() {
+    async getData() {
       if (!this.ip || !this.isIp(this.ip)) {
         this.countryInfo = null;
         this.errorMessage = null;
@@ -108,7 +108,7 @@ export default {
         return;
       }
       this.loading = true;
-      const response = await this.$store.dispatch('implementData', {
+      const response = await this.$store.dispatch('fetchFilteredCountryData', {
         ip: this.ip,
         searchBarIdx: this.searchBarIdx,
       });

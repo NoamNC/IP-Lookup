@@ -28,7 +28,7 @@ const mutations = {
 };
 
 const actions = {
-  async implementData({ commit }, { ip, searchBarIdx }) {
+  async fetchFilteredCountryData({ commit }, { ip, searchBarIdx }) {
     const cachedIpResult = cacheService.find(ip);
     if (cachedIpResult) {
       commit('updateSearchBarData', { searchBarIdx, searchBarObj: cachedIpResult });

@@ -2,8 +2,9 @@
 ## Table of Contents
 1. [General Info](#general-info)
 2. [Project setup and Configuration](#project-setup-and-configuration)
-3. [FAQs](#faqs)
-4. [Spacial thanks](#spacial-thanks)
+3. [Roadmap](#roadmap)
+4. [FAQs](#faqs)
+5. [Spacial thanks](#spacial-thanks)
 
 # IP lookup app
 ### General Info
@@ -23,13 +24,18 @@ $ npm install
 ```
 
 **in order to get the data an API key is required.**
-to get an API key either sign up to [ipgeolocation](https://app.ipgeolocation.io/) or email me and I will provide you with my API key.
+to get an API key either sign up to [ipgeolocation's](https://app.ipgeolocation.io/) or email me and I will provide you with my API key.
 once you obtained the api key, add to the main project folder a file with the name ".env".
 in the .env file you must add the line "VUE_APP_API_KEY=...".
 after that you should run the command:
 ```
 $ npm run serve
 ```
+
+### Roadmap
+1. wrap app in docker for easy deployment.
+2. add unit testing.
+
 
 ### FAQ
 
@@ -38,5 +44,6 @@ q: Since the api you're using has a limit on the amount of requests sent per mon
 a: I can't. but I reduced the amount of requests by using the local storage for chaching.
 
 ### Spacial thanks
-I wanted to give a spacial thanks to [Torq](https://torq.io/) for this assignment and the opportunity to showcase my skills 
+I wanted to give a spacial thanks to [Torq](https://torq.io/) for this assignment and the opportunity to showcase my skills :)
+
 
