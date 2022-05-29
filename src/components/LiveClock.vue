@@ -13,15 +13,20 @@ export default {
   },
   data() {
     return {
-      interval: null,
-      time: null,
+      time: Intl.DateTimeFormat(navigator.language, {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: false,
+        timeZone: this.timeZoneName,
+      }).format(),
     };
   },
   beforeDestroy() {
     clearInterval(this.interval);
   },
   created() {
-    this.interval = setInterval(() => {
+    setInterval(() => {
       this.time = Intl.DateTimeFormat(navigator.language, {
         hour: 'numeric',
         minute: 'numeric',

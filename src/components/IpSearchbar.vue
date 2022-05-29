@@ -5,15 +5,15 @@
     </div>
     <v-text-field
       v-model="ip"
+      label="IP address"
       dense
-      :rules="[rules.ip]"
       outlined
       single-line
       clearable
       :disabled="loading"
-      label="IP address"
-      @click:clear="clearSearchbar"
-      @blur="getData"
+      :rules="[rules.ip]"
+      @click:clear="clearSearchbar(null)"
+      @blur="doLookup"
     ></v-text-field>
     <v-progress-circular
       size="25"
@@ -22,29 +22,24 @@
       indeterminate
       color="primary"
     ></v-progress-circular>
-    <div v-show="!loading" class="country-info">
-      <v-tooltip bottom v-if="countryInfo">
-        <template v-slot:activator="{ on, attrs }">
+    <div v-if="!loading" class="country-info">
+      <v-tooltip bottom v-if="countryInfo || errorMessage">
+        <template v-slot:activator="{ on: on }">
           <img
             v-if="countryInfo"
-            v-bind="attrs"
             v-on="on"
             :src="countryInfo.flagUrl"
             alt="flag"
             class="flag"
           />
-        </template>
-        <span>{{ countryInfo.name }}</span>
-      </v-tooltip>
-      <LiveClock v-if="countryInfo" :timeZoneName="countryInfo.timeZoneName" />
-      <v-tooltip bottom v-if="errorMessage">
-        <template v-slot:activator="{ on, attrs }">
-          <v-icon v-bind="attrs" v-on="on" color="error" class="error-icon">
+          <v-icon v-if="errorMessage" v-on="on" color="error" class="error-icon">
             mdi-alert-circle
           </v-icon>
         </template>
-        <span>{{ errorMessage }}</span>
+        <span v-if="errorMessage">{{ errorMessage }}</span>
+        <span v-if="countryInfo">{{ countryInfo.name }}</span>
       </v-tooltip>
+      <LiveClock v-if="countryInfo" :timeZoneName="countryInfo.timeZoneName" />
     </div>
   </div>
 </template>
@@ -80,9 +75,9 @@ export default {
     };
   },
   methods: {
-    clearSearchbar() {
-      this.ip = null;
-      this.rules.ip = true;
+    clearSearchbar(ip) {
+      this.ip = ip;
+      ip && this.rules.ip(ip);
       this.errorMessage = null;
       this.countryInfo = null;
       this.$store.commit('updateSearchBarData', {
@@ -94,14 +89,9 @@ export default {
       const pattern = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)(\.(?!$)|$)){4}$/;
       return pattern.test(ip);
     },
-    async getData() {
+    async doLookup() {
       if (!this.ip || !this.isIp(this.ip)) {
-        this.countryInfo = null;
-        this.errorMessage = null;
-        this.$store.commit('updateSearchBarData', {
-          searchBarIdx: this.searchBarIdx,
-          searchBarObj: {},
-        });
+        this.clearSearchbar(this.ip);
         return;
       }
       if (this.$store.getters.searchBars[this.searchBarIdx].ip === this.ip) {
@@ -113,9 +103,7 @@ export default {
         searchBarIdx: this.searchBarIdx,
       });
       response.error
-        ? (this.errorMessage =
-            'received error from GeoIp service: ' + response.message) &&
-          (this.countryInfo = null)
+        ? (this.errorMessage = response.message) && (this.countryInfo = null)
         : (this.countryInfo = response) && (this.errorMessage = null);
       setTimeout(() => {
         this.loading = false;
@@ -145,7 +133,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 7fr 2fr;
   align-items: baseline;
-  grid-column-gap: 5px
+  grid-column-gap: 5px;
 }
 
 .country-info {
@@ -154,8 +142,8 @@ export default {
 }
 .flag {
   margin: auto;
-  max-width: 40px;
-  max-height: 20px;
+  width: 40px;
+  height: 20px;
 }
 
 .error-icon {

@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import apiService from '../services/api.service';
 import cacheService from '../services/cache.service';
-import countryService from '../services/country.service';
 
 Vue.use(Vuex);
 const state = {
@@ -35,21 +34,15 @@ const actions = {
       return cachedIpResult;
     }
 
-    const response = await apiService.getCountryData(ip);
-    if (response.error) {
-      return response;
+    const countryData = await apiService.getCountryData(ip);
+    if (countryData.error) {
+      commit('updateSearchBarData', { searchBarIdx, searchBarObj: {} });
+      return countryData;
     }
-    
-    const filteredResponse = {
-      ip,
-      name: countryService.getName(response),
-      timeZoneName: countryService.getTimeZoneName(response),
-      flagUrl: countryService.getFlagUrl(response),
-    };
 
-    cacheService.insert(ip, filteredResponse);
-    commit('updateSearchBarData', { searchBarIdx, searchBarObj: filteredResponse });
-    return filteredResponse;
+    cacheService.insert(ip, countryData);
+    commit('updateSearchBarData', { searchBarIdx, searchBarObj: countryData });
+    return countryData;
   },
 };
 export default new Vuex.Store({

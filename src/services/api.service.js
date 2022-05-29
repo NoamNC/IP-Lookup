@@ -5,13 +5,23 @@ const BASE_URL = `https://api.ipgeolocation.io/ipgeo?apiKey=${API_KEY}&ip=`;
 const getCountryData = async (ip) => {
   try {
     const response = await axios.get(BASE_URL + ip);
-    return response.data;
+    return filterResponse(ip, response.data);
   } catch (err) {
+    const message = err.response.data ? err.response.data.message : err.message;
     return {
       error: true,
-      message: err.response.data.message || err.message,
+      message,
     };
   }
+};
+
+const filterResponse = (ip, response) => {
+  return {
+    ip,
+    name: response.country_name,
+    timeZoneName: response.time_zone.name,
+    flagUrl: response.country_flag,
+  };
 };
 
 export default {
