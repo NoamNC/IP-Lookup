@@ -131,7 +131,7 @@ export default {
 .search-bar-container {
   margin: auto;
   display: grid;
-  grid-template-columns: 1fr 7fr 2fr;
+  grid-template-columns: 0.5fr 7fr 2fr;
   align-items: baseline;
   grid-column-gap: 5px;
 }
