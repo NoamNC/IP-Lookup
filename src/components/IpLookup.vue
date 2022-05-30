@@ -61,7 +61,7 @@ export default {
   margin: 40px auto;
 }
 .top-section {
-  padding: 20px;
+  padding: 10px 20px;
   display: flex;
   align-items: baseline;
 }
@@ -76,7 +76,7 @@ export default {
 @media only screen and (max-width: 350px) {
   .bottom-section,
   .top-section {
-    padding:20px 10px;
+    padding: 10px;
   }
 }
 .v-btn {
